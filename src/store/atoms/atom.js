@@ -20,7 +20,7 @@ export const intervalIdAtom = atom({
 
   export const notificationAtom = atom({
     key: 'notificationAtom',
-    default: null, 
+    default: [], 
   });
 
   export const webSocketAtom = atom({

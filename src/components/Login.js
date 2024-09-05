@@ -10,7 +10,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [intervalId,setIntervalId]=useRecoilState(intervalIdAtom);
-  const setNotification= useRecoilValue(notificationAtom);
+  const setNotification= useSetRecoilState(notificationAtom);
   const [isLogin,setLogin]=useRecoilState(LoginCheck);
   const setSocket= useSetRecoilState(webSocketAtom);
 
@@ -27,12 +27,16 @@ function Login() {
       const data= JSON.parse(event.data);
       console.log(data);
       if(data.type === 'help'){
-        setNotification({
+        const entry={
           victimId: data.victimId,
           name: data.name,
           location: data.location,
           timestamp: new Date().toISOString()
-        })
+        }
+        setNotification((prevNotifications) => [
+          ...prevNotifications, // Spread existing notifications
+          entry // Add the new notification
+        ]);
         navigate('/notifications');
       }
     }

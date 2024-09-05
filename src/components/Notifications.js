@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { notificationAtom } from "../store/atoms/atom";
 
-const Notifications = ({ socket }) => {
-  const [notifications, setNotifications] = useState([]);
+const Notifications = () => {
+  const notifications= useRecoilValue(notificationAtom);
   const navigate = useNavigate();
 
   const handleAccept = () => {
@@ -12,6 +14,10 @@ const Notifications = ({ socket }) => {
   const handleIgnore = () => {
     navigate("/home");
   };
+
+  useEffect(()=>{
+
+  },[notifications]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-pink-200">
@@ -30,7 +36,7 @@ const Notifications = ({ socket }) => {
           >
             <h2 className="text-xl font-bold mb-2">Help Required</h2>
             <p className="text-gray-700 mb-4">
-            Urgent: Immediate Assistance Required for "Girlsname"
+            Urgent: Immediate Assistance Required for {notification.name}
             </p>
             <div className="flex space-x-4">
               <button
