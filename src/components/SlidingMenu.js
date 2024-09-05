@@ -8,8 +8,31 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import "../App.css";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 function SlidingMenu({ isOpen, toggleMenu }) {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+       
+      // Handle WebSocket close event
+      const socket = new WebSocket(`ws://localhost:5173?userId=${localStorage.getItem("userId")}`);
+      socket.onclose = () => {
+      socket.send("WebSocket connection closed", localStorage.getItem("userId"));
+      };
+
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("userId");
+
+      // Navigate to the login page
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+
   return (
     <div
       className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform ${
@@ -54,7 +77,10 @@ function SlidingMenu({ isOpen, toggleMenu }) {
           </li>
           <li
             className="flex items-center space-x-4 cursor-pointer"
-            onClick={toggleMenu}
+            onClick={() => {
+              handleLogout();
+              toggleMenu();
+            }}
           >
             <FontAwesomeIcon icon={faSignOutAlt} />
             <span>Logout</span>
