@@ -35,7 +35,7 @@ function Login() {
 
     if (isLogin) {
         const userId = isLogin;
-      const  interval = setInterval(async () => {
+        const  interval = setInterval(async () => {
           navigator.geolocation.getCurrentPosition(
             (position) => {
               const location = {
