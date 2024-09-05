@@ -10,6 +10,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import SlidingMenu from "./SlidingMenu"; // Import the sliding menu component
 import "../App.css"; // Assuming styles are handled here
+import { webSocketAtom } from "../store/atoms/atom";
+import { useRecoilValue } from "recoil";
+
+
 
 
 function Home() {
@@ -17,6 +21,8 @@ function Home() {
   const [maleCount, setMaleCount] = useState(null);
   const [femaleCount, setFemaleCount] = useState(null);
   const [loading, setLoading] = useState(true);
+  const socket= useRecoilValue(webSocketAtom);
+  
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -46,7 +52,7 @@ function Home() {
     fetchNearbyData();
   }, []);
 
-  const socket = new WebSocket("ws://localhost:5173?userId=data._id");
+  
 
 
     // Handle WebSocket connection open event
@@ -139,7 +145,17 @@ function Home() {
             </button>
           </div>
           <div className="flex justify-center">
-            <button className="button bg-pink-500 text-white text-xl font-bold py-3 px-8 rounded-full shadow-lg">
+            <button onClick={()=>{
+              if(socket){
+                const message={
+                  "action":"panic"
+                }
+                socket.send(JSON.stringify(message));
+              }else{
+                console.log('socket khali hai')
+              }
+              // add send sms also   
+            }} className="button bg-pink-500 text-white text-xl font-bold py-3 px-8 rounded-full shadow-lg">
               PANIC
             </button>
           </div>

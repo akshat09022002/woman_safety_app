@@ -1,8 +1,8 @@
 import React, { useState,useEffect,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useRecoilState } from "recoil";
-import { intervalIdAtom, locationAtom, LoginCheck } from "../store/atoms/atom";
+import { useRecoilState,useRecoilValue, useSetRecoilState } from "recoil";
+import { intervalIdAtom, locationAtom, LoginCheck,notificationAtom, webSocketAtom } from "../store/atoms/atom";
 
 
 function Login() {
@@ -10,16 +10,31 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [intervalId,setIntervalId]=useRecoilState(intervalIdAtom);
-
+  const setNotification= useRecoilValue(notificationAtom);
   const [isLogin,setLogin]=useRecoilState(LoginCheck);
+  const setSocket= useSetRecoilState(webSocketAtom);
 
   let socket=null;
   if(isLogin){
     socket = new WebSocket(
       `ws://localhost:5173?userId=${localStorage.getItem("userId")}`
     );
+    setSocket(socket);
     socket.onopen=()=>{
       console.log("socket connected");
+    }
+    socket.onmessage=(event)=>{
+      const data= JSON.parse(event.data);
+      console.log(data);
+      if(data.type === 'help'){
+        setNotification({
+          victimId: data.victimId,
+          name: data.name,
+          location: data.location,
+          timestamp: new Date().toISOString()
+        })
+        navigate('/notifications');
+      }
     }
   }else{
     console.log("socket not connected");
