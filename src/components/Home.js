@@ -43,7 +43,8 @@ function Home() {
             />
           </div>
           <div className="grid grid-cols-2 gap-6 mb-6">
-            <button className="button bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center text-pink-600">
+            <button onClick={()=>navigate("/contacts")} 
+            className="button bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center text-pink-600">
               <FontAwesomeIcon icon={faAddressBook} className="text-3xl mb-2" />
               Contacts
             </button>

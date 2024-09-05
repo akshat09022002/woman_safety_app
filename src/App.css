@@ -116,3 +116,12 @@ button:hover {
 }
 
 /* You can add more styles as needed */
+/* Add contact styles */
+
+.relative.min-h-screen.bg-white {
+  transition: filter 0.3s ease-in-out;
+}
+
+.relative.min-h-screen.bg-white.blur {
+  filter: blur(5px);
+}
