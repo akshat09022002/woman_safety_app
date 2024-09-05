@@ -10,6 +10,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import SlidingMenu from "./SlidingMenu"; // Import the sliding menu component
 import "../App.css"; // Assuming styles are handled here
+import { webSocketAtom } from "../store/atoms/atom";
+import { useRecoilValue } from "recoil";
+import axios from "axios"; 
+
 
 
 function Home() {
@@ -17,6 +21,9 @@ function Home() {
   const [maleCount, setMaleCount] = useState(null);
   const [femaleCount, setFemaleCount] = useState(null);
   const [loading, setLoading] = useState(true);
+  const socket= useRecoilValue(webSocketAtom);
+  const userId = localStorage.getItem("userId");
+
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -46,7 +53,7 @@ function Home() {
     fetchNearbyData();
   }, []);
 
-  const socket = new WebSocket("ws://localhost:5173?userId=data._id");
+  
 
 
     // Handle WebSocket connection open event
@@ -139,7 +146,27 @@ function Home() {
             </button>
           </div>
           <div className="flex justify-center">
-            <button className="button bg-pink-500 text-white text-xl font-bold py-3 px-8 rounded-full shadow-lg">
+            <button onClick={async()=>{
+              if(socket){
+                const message={
+                  "action":"panic"
+                }
+                socket.send(JSON.stringify(message));
+              }else{
+                console.log('socket khali hai')
+              }
+              // add send sms also   
+              try {
+                const response = await axios.post("http://localhost:5000/api/v1/user/send-sms", {
+                  userId, // Pass the userId in the body
+                });
+
+                const result = response.data;
+                console.log(result.msg); // Log the success message
+              } catch (error) {
+                console.error("Failed to send SMS", error);
+              }
+            }} className="button bg-pink-500 text-white text-xl font-bold py-3 px-8 rounded-full shadow-lg">
               PANIC
             </button>
           </div>

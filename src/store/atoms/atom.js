@@ -17,3 +17,13 @@ export const intervalIdAtom = atom({
       longitude: null
     },
   });
+
+  export const notificationAtom = atom({
+    key: 'notificationAtom',
+    default: null, 
+  });
+
+  export const webSocketAtom = atom({
+    key: 'webSocketAtom',
+    default: null, // Initial value is null or you can use an empty object
+  });
