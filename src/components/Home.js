@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,6 +14,9 @@ import "../App.css"; // Assuming styles are handled here
 
 function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [maleCount, setMaleCount] = useState(null);
+  const [femaleCount, setFemaleCount] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -23,6 +26,25 @@ function Home() {
   const handleParentsClick = () => {
     navigate("/parents-options");
   };
+
+  useEffect(() => {
+    const fetchNearbyData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/v1/user/find-nearby");
+        const data = await response.json();
+
+        
+        setMaleCount(data.genderCounts.male);
+        setFemaleCount(data.genderCounts.female);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching the data", error);
+        setLoading(false);
+      }
+    };
+
+    fetchNearbyData();
+  }, []);
 
   const socket = new WebSocket("ws://localhost:5173?userId=data._id");
 
@@ -48,6 +70,39 @@ function Home() {
               className="w-full h-auto"
             />
           </div>
+
+          {/* Display the male and female count */}
+          <div className="text-center mb-6">
+            {loading ? (
+              <p>Loading nearby data...</p>
+            ) : (
+              <div className="bg-white p-4 rounded-lg shadow-md border-2 border-pink-200">
+                <h2 className="text-xl font-bold text-pink-700 mb-2">
+                  Nearby Data
+                </h2>
+                <div className="flex justify-around">
+                  <div className="bg-pink-100 p-4 rounded-lg shadow-sm w-1/3">
+                    <p className="text-sm font-semibold text-gray-600">
+                      Male Count
+                    </p>
+                    <p className="text-2xl font-bold text-pink-600">
+                      {maleCount ?? "N/A"}
+                    </p>
+                  </div>
+                  <div className="bg-pink-100 p-4 rounded-lg shadow-sm w-1/3">
+                    <p className="text-sm font-semibold text-gray-600">
+                      Female Count
+                    </p>
+                    <p className="text-2xl font-bold text-pink-600">
+                      {femaleCount ?? "N/A"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+
           <div className="grid grid-cols-2 gap-6 mb-6">
             <button 
              onClick={() => navigate("/contacts")}
