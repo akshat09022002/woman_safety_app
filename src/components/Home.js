@@ -12,7 +12,7 @@ import SlidingMenu from "./SlidingMenu"; // Import the sliding menu component
 import "../App.css"; // Assuming styles are handled here
 import { webSocketAtom } from "../store/atoms/atom";
 import { useRecoilValue } from "recoil";
-
+import axios from "axios"; 
 
 
 
@@ -22,7 +22,8 @@ function Home() {
   const [femaleCount, setFemaleCount] = useState(null);
   const [loading, setLoading] = useState(true);
   const socket= useRecoilValue(webSocketAtom);
-  
+  const userId = localStorage.getItem("userId");
+
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -39,7 +40,7 @@ function Home() {
         const response = await fetch("http://localhost:5000/api/v1/user/find-nearby");
         const data = await response.json();
 
-        
+
         setMaleCount(data.genderCounts.male);
         setFemaleCount(data.genderCounts.female);
         setLoading(false);
@@ -80,11 +81,11 @@ function Home() {
           {/* Display the male and female count */}
           <div className="text-center mb-6">
             {loading ? (
-              <p>Loading nearby data...</p>
+              <p>Loading nearby gender ratio...</p>
             ) : (
               <div className="bg-white p-4 rounded-lg shadow-md border-2 border-pink-200">
                 <h2 className="text-xl font-bold text-pink-700 mb-2">
-                  Nearby Data
+                  Nearby Gender Ratio
                 </h2>
                 <div className="flex justify-around">
                   <div className="bg-pink-100 p-4 rounded-lg shadow-sm w-1/3">
@@ -127,7 +128,7 @@ function Home() {
               Alert
             </button>
             <button
-              onClick={() => navigate("/location")}
+              onClick={() => navigate("/location-options")}
               className="button bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center text-pink-600"
             >
               <FontAwesomeIcon
@@ -145,7 +146,7 @@ function Home() {
             </button>
           </div>
           <div className="flex justify-center">
-            <button onClick={()=>{
+            <button onClick={async()=>{
               if(socket){
                 const message={
                   "action":"panic"
@@ -155,6 +156,16 @@ function Home() {
                 console.log('socket khali hai')
               }
               // add send sms also   
+              try {
+                const response = await axios.post("http://localhost:5000/api/v1/user/send-sms", {
+                  userId, // Pass the userId in the body
+                });
+
+                const result = response.data;
+                console.log(result.msg); // Log the success message
+              } catch (error) {
+                console.error("Failed to send SMS", error);
+              }
             }} className="button bg-pink-500 text-white text-xl font-bold py-3 px-8 rounded-full shadow-lg">
               PANIC
             </button>
