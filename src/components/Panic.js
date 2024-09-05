@@ -8,10 +8,6 @@ const Panic=()=>{
     const navigate=useNavigate();
     const position ={lat: 43.6532, lng: -79.3832}
     const [zoom, setZoom] = useState(9);
-    const [routes,setRoutes]= useState([]);
-    const [routeIndex,setRouteIndex]=useState(0);
-    const selected= routes[routeIndex];
-    const leg = selected?.legs[0];
 
     return <div className="min-h-screen flex flex-col justify-center items-center bg-pink-200 relative">
       <div className="relative w-full max-w-xs">
@@ -40,11 +36,16 @@ function Directions(){
     const [directionsService,setDirectionService]= useState();
     const [directionsRenderer,setDirectionRenderer]= useState();
     const [routes,setRoutes]=useState([]);
+    const [routeIndex,setRouteIndex] = useState(0);
+    const selected= routes[routeIndex];
+    const leg= selected?.legs[0];
+    
     useEffect(()=>{
         if(!routesLibrary || !map) return;
         setDirectionService(new routesLibrary.DirectionsService());
         setDirectionRenderer(new routesLibrary.DirectionsRenderer({map}));
     },[routesLibrary,map]);
+
 
     useEffect(()=>{
 
@@ -60,7 +61,30 @@ function Directions(){
             setRoutes(response.routes);
         })
     },[directionsService,directionsRenderer]);
+
+    useEffect(()=>{
+        if(!directionsRenderer) return;
+        
+        directionsRenderer.setRouteIndex(routeIndex)
+    },[routeIndex,directionsRenderer])
     
+    if(!leg) return null
+
+    return <div className="directions">
+        <h2>{selected.summary}</h2>
+        <p>{leg.start_address.split(',')[0]} to {leg.end_address.split(',')[0]}</p>
+        <p>Distance: {leg.distance?.text}</p>
+        <p>Duration: {leg.duration?.text}</p>
+
+        <h2>Other Routes</h2>
+        <ul>
+            {routes.map((route,index)=>{
+                
+               return <li key={route.summary}><button onClick={()=>setRouteIndex(index)}>{route.summary}</button></li>
+
+            })}
+        </ul>
+    </div>
     
 }
 

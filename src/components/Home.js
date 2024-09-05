@@ -11,6 +11,7 @@ import {
 import SlidingMenu from "./SlidingMenu"; // Import the sliding menu component
 import "../App.css"; // Assuming styles are handled here
 
+
 function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -22,6 +23,11 @@ function Home() {
   const handleParentsClick = () => {
     navigate("/parents-options");
   };
+
+  const socket = new WebSocket("ws://localhost:5173?userId=data._id");
+
+
+    // Handle WebSocket connection open event
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-pink-200 relative">
