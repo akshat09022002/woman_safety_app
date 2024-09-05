@@ -8,6 +8,7 @@ import WomenLaws from "./components/WomenLaws";
 import LawDetail from "./components/LawDetail";
 import SelfDefence from "./components/SelfDefence";
 import Login from "./components/Login";
+import Notifications from "./components/Notifications";
 import Signup from "./components/Signup";
 import Panic from "./components/Panic";
 import { RecoilRoot } from "recoil";
@@ -28,6 +29,7 @@ function App() {
         <Route path="/alert-options" element={<AlertOptions />} />
         <Route path="/parents-options" element={<ParentsOptions />} />
         <Route path="/women-laws" element={<WomenLaws />} />
+        <Route exact path="/notifications" element={<Notifications />} />
         <Route path="/law-detail/:law" element={<LawDetail />} />
         <Route path="/self-defence" element={<SelfDefence />} />
         <Route path="/panic" element={<Panic />}></Route>

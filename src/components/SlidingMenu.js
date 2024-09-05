@@ -36,6 +36,10 @@ function SlidingMenu({ isOpen, toggleMenu }) {
     }
   };
 
+  const handleNotifications= async() =>{
+    navigate("/notifications")
+  }
+
 
   return (
     <div
@@ -67,7 +71,10 @@ function SlidingMenu({ isOpen, toggleMenu }) {
           </li>
           <li
             className="flex items-center space-x-4 cursor-pointer"
-            onClick={toggleMenu}
+            onClick={() => {
+              handleNotifications();
+              toggleMenu();
+            }}
           >
             <FontAwesomeIcon icon={faBell} />
             <span>Notification</span>
