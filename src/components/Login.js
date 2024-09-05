@@ -1,55 +1,71 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { intervalIdAtom, locationAtom, LoginCheck } from "../store/atoms/atom";
+
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [intervalId,setIntervalId]=useRecoilState(intervalIdAtom);
 
-  // WebSocket and location update handler
-  const handleWebSocketAndLocation = (userId) => {
-    // Connect to the WebSocket server
-    const socket = new WebSocket("ws://localhost:5173?userId=data._id");
+  const [isLogin,setLogin]=useRecoilState(LoginCheck);
 
-    // Handle WebSocket connection open event
-    socket.onopen = () => {
-      console.log("Connected to WebSocket server");
+  let socket=null;
+  if(isLogin){
+    socket = new WebSocket(
+      `ws://localhost:5173?userId=${localStorage.getItem("userId")}`
+    );
+    socket.onopen=()=>{
+      console.log("socket connected");
+    }
+  }else{
+    console.log("socket not connected");
+  }
+  
 
-      // Function to fetch location and emit to the socket
-      const fetchAndSendLocation = () => {
-        if (navigator.geolocation) {
+  useEffect(() => {
+    console.log("reload");
+    if(intervalId){
+      clearInterval(intervalId);
+      setIntervalId(null);
+    } 
+
+    if (isLogin) {
+        const userId = isLogin;
+      const  interval = setInterval(async () => {
           navigator.geolocation.getCurrentPosition(
             (position) => {
-              const { latitude, longitude } = position.coords;
+              const location = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              };
 
+              const message= JSON.stringify({
+                action:"updateLocation",
+                latitude: location.latitude,
+                longitude: location.longitude
+              })
 
-              // Emit location data and userId to the WebSocket server
-              const locationData = { latitude, longitude, userId };
-              socket.send(JSON.stringify(locationData));
-
-              console.log("Location sent:", { latitude, longitude });
-
-              setTimeout(fetchAndSendLocation, 30000); // 30 seconds
+              if(socket && socket.readyState=== WebSocket.OPEN){
+                socket.send(message);
+              }
+              
+              console.log("Current Location:", location);
             },
             (error) => {
-              console.error("Error fetching location:", error);
+              console.error("Error getting location:", error);
             }
           );
-        } else {
-          console.error("Geolocation is not supported by this browser.");
-        }
-      };
+        }, 3000);
 
-      // Start fetching and sending location
-      fetchAndSendLocation();
-    };
+        setIntervalId(interval);
+    }
+  }, [isLogin]);
 
-    // Handle WebSocket error event
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,18 +76,19 @@ function Login() {
         const response = await axios.post("http://localhost:5000/api/v1/user/login", {
           email,
           password,
-        });
+        }); 
 
         const data = response.data;
         console.log(data);
+
         
         if (response.status === 201) {
           // Store login state and userId in local storage
           localStorage.setItem("isLoggedIn", "true");
           localStorage.setItem("userId", data.userId);
+          setLogin(localStorage.getItem('userId'));
 
           // Connect to WebSocket and send location data
-          handleWebSocketAndLocation(data.userId);
 
           // Redirect to home page
           navigate("/home");

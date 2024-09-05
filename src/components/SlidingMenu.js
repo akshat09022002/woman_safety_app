@@ -10,8 +10,11 @@ import {
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useSetRecoilState } from "recoil";
+import { LoginCheck } from "../store/atoms/atom";
 
 function SlidingMenu({ isOpen, toggleMenu }) {
+  const setLogin= useSetRecoilState(LoginCheck);
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
@@ -19,11 +22,12 @@ function SlidingMenu({ isOpen, toggleMenu }) {
       // Handle WebSocket close event
       const socket = new WebSocket(`ws://localhost:5173?userId=${localStorage.getItem("userId")}`);
       socket.onclose = () => {
-      socket.send("WebSocket connection closed", localStorage.getItem("userId"));
+      console.log("WebSocket connection closed", localStorage.getItem("userId"));
       };
 
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("userId");
+      setLogin(false);
 
       // Navigate to the login page
       navigate("/login");
