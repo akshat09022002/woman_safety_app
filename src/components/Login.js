@@ -6,15 +6,22 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    // Simple validation and redirect to home
-    if (email && password) {
-      // Store login state in local storage if needed
-      localStorage.setItem("isLoggedIn", "true");
+
+    // Retrieve the stored user data from localStorage
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    // Check if the credentials match
+    if (
+      storedUser &&
+      storedUser.email === email &&
+      storedUser.password === password
+    ) {
+      alert("Login successful!");
       navigate("/home");
     } else {
-      alert("Please fill in all fields");
+      alert("Invalid credentials, please try again.");
     }
   };
 
@@ -22,37 +29,35 @@ function Login() {
     <div className="min-h-screen flex flex-col justify-center items-center bg-pink-200">
       <div className="bg-white rounded-tl-3xl rounded-br-3xl shadow-lg p-6 max-w-xs w-full">
         <h2 className="text-2xl font-bold text-pink-700 mb-4">Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border border-pink-300 rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border border-pink-300 rounded-md"
-            />
-          </div>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            className="mb-4 p-2 w-full border border-gray-300 rounded-md"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="mb-4 p-2 w-full border border-gray-300 rounded-md"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           <button
             type="submit"
-            className="w-full bg-pink-500 text-white text-lg font-bold py-2 px-4 rounded-md shadow-md hover:bg-pink-700"
+            className="w-full bg-pink-500 text-white py-2 px-4 rounded-md hover:bg-pink-700"
           >
             Login
           </button>
         </form>
-        <p className="text-center text-pink-700 mt-4">
-          Don’t have an account?{" "}
+        <p className="mt-4 text-center">
+          Don't have an account?{" "}
           <span
+            className="text-pink-700 cursor-pointer"
             onClick={() => navigate("/signup")}
-            className="cursor-pointer text-pink-500 underline"
           >
             Sign Up
           </span>

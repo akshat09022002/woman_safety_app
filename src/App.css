@@ -116,3 +116,13 @@ button:hover {
 }
 
 /* You can add more styles as needed */
+/* Location button styles */
+.location-button {
+  background-color: #a3e635; /* light green */
+  color: #15803d; /* dark green */
+  transition: background-color 0.3s ease; /* Smooth transition for hover */
+}
+
+.location-button:hover {
+  background-color: #4ade80; /* darker green on hover */
+}
