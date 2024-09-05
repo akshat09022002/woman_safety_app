@@ -33,7 +33,7 @@ function Home() {
         const response = await fetch("http://localhost:5000/api/v1/user/find-nearby");
         const data = await response.json();
 
-        
+
         setMaleCount(data.genderCounts.male);
         setFemaleCount(data.genderCounts.female);
         setLoading(false);
@@ -74,11 +74,11 @@ function Home() {
           {/* Display the male and female count */}
           <div className="text-center mb-6">
             {loading ? (
-              <p>Loading nearby data...</p>
+              <p>Loading nearby gender ratio...</p>
             ) : (
               <div className="bg-white p-4 rounded-lg shadow-md border-2 border-pink-200">
                 <h2 className="text-xl font-bold text-pink-700 mb-2">
-                  Nearby Data
+                  Nearby Gender Ratio
                 </h2>
                 <div className="flex justify-around">
                   <div className="bg-pink-100 p-4 rounded-lg shadow-sm w-1/3">
@@ -121,7 +121,7 @@ function Home() {
               Alert
             </button>
             <button
-              onClick={() => navigate("/location")}
+              onClick={() => navigate("/location-options")}
               className="button bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center text-pink-600"
             >
               <FontAwesomeIcon
