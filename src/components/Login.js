@@ -2,7 +2,7 @@ import React, { useState,useEffect,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState,useRecoilValue, useSetRecoilState } from "recoil";
-import { intervalIdAtom, locationAtom, LoginCheck,notificationAtom, webSocketAtom } from "../store/atoms/atom";
+import { directionAtom, intervalIdAtom, locationAtom, LoginCheck,notificationAtom, webSocketAtom } from "../store/atoms/atom";
 
 
 function Login() {
@@ -12,10 +12,12 @@ function Login() {
   const [intervalId,setIntervalId]=useRecoilState(intervalIdAtom);
   const setNotification= useSetRecoilState(notificationAtom);
   const [isLogin,setLogin]=useRecoilState(LoginCheck);
+  const setDirection= useSetRecoilState(directionAtom)
   const setSocket= useSetRecoilState(webSocketAtom);
 
   let socket=null;
   if(isLogin){
+    console.log("establishing connection")
     socket = new WebSocket(
       `ws://localhost:5173?userId=${localStorage.getItem("userId")}`
     );
@@ -33,6 +35,7 @@ function Login() {
           location: data.location,
           timestamp: new Date().toISOString()
         }
+        
         setNotification((prevNotifications) => [
           ...prevNotifications, // Spread existing notifications
           entry // Add the new notification
@@ -67,7 +70,10 @@ function Login() {
                 latitude: location.latitude,
                 longitude: location.longitude
               })
-
+              setDirection({
+                latitude: location.latitude,
+                longitude:location.longitude
+              })
               if(socket && socket.readyState=== WebSocket.OPEN){
                 socket.send(message);
               }

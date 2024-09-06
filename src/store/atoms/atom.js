@@ -27,3 +27,8 @@ export const intervalIdAtom = atom({
     key: 'webSocketAtom',
     default: null, // Initial value is null or you can use an empty object
   });
+
+  export const directionAtom= atom({
+    key: 'directionAtom',
+    default: null
+  })

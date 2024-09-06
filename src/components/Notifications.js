@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { notificationAtom } from "../store/atoms/atom";
+import { directionAtom, notificationAtom } from "../store/atoms/atom";
 
 const Notifications = () => {
   const notifications= useRecoilValue(notificationAtom);
+  const curr_location= useRecoilValue(directionAtom);
   const navigate = useNavigate();
 
-  const handleAccept = () => {
-    navigate("/panic");
+  const handleAccept = (destination) => {
+    const props={
+      origin: curr_location,
+      destination: destination
+    }
+    navigate("/panic",{state: {props}});
   };
 
   const handleIgnore = () => {
     navigate("/home");
   };
+
 
   useEffect(()=>{
 
@@ -40,7 +46,7 @@ const Notifications = () => {
             </p>
             <div className="flex space-x-4">
               <button
-                onClick={handleAccept}
+                onClick={handleAccept(notification.location.coordinates)}
                 className="bg-green-500 text-white p-2 rounded-lg"
               >
                 Accept
