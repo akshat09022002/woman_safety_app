@@ -27,7 +27,7 @@ const Notifications = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-pink-200">
-      <div className="bg-white h-[556px] w-[272px] rounded-tl-3xl rounded-br-3xl shadow-lg p-6">  
+      <div className="bg-white h-[556px] w-[272px] rounded-tl-3xl rounded-br-3xl shadow-lg p-6 overflow-auto">  
       {notifications.length === 0 ? (
         <div className="bg-red-100 rounded-lg shadow-lg p-6 max-w-md w-full mb-4"
           >
@@ -38,7 +38,7 @@ const Notifications = () => {
         notifications.map((notification, index) => (
           <div
             key={index}
-            className="bg-red-100 rounded-lg shadow-lg p-6 max-w-md w-full mb-4"
+            className="bg-red-100 rounded-lg shadow-lg p-6 max-w-md w-full mb-4 "
           >
             <h2 className="text-xl font-bold mb-2">Help Required</h2>
             <p className="text-gray-700 mb-4">

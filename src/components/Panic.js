@@ -5,11 +5,11 @@ import "../App.css"; // Assuming styles are handled here
 import { APIProvider, Map, useMapsLibrary, useMap } from "@vis.gl/react-google-maps";
 
 const Panic = () => {
+    
     const location= useLocation();
     console.log(location);
     const data=location.state.props;
     
-    const navigate = useNavigate();
     // const position = { lats: 43.6532, lng: -79.3832 }; // Initial position
     const [zoom, setZoom] = useState(9);
 
@@ -42,6 +42,7 @@ const Panic = () => {
 
 function Directions({ origin, destination }) {
     const map = useMap();
+    const navigate = useNavigate();
     const routesLibrary = useMapsLibrary("routes");
     const [directionsService, setDirectionService] = useState();
     const [directionsRenderer, setDirectionRenderer] = useState();
@@ -94,6 +95,12 @@ function Directions({ origin, destination }) {
                     </li>
                 ))}
             </ul>
+            <button
+          onClick={() => navigate("/home")}
+          className="mt-4 bg-blue-500 text-white text-lg p-2 rounded-md"
+        >
+          BACK
+        </button>
         </div>
     );
 }

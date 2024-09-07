@@ -98,7 +98,7 @@ function HospitalMap() {
     <div className="relative w-full max-w-xs">
     <div className="bg-white h-[556px] w-[272px] rounded-tl-3xl rounded-br-3xl shadow-lg p-6">
       <h2 className="text-center text-xl font-bold mb-4">
-        Nearest Police Stations
+        Nearest Hospitals
       </h2>
       <div id="map" style={{ height: "90%", width: "100%" }}></div>
     </div>

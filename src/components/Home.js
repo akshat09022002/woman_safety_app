@@ -158,7 +158,7 @@ function Home() {
               // add send sms also   
               try {
                 const response = await axios.post("http://localhost:5000/api/v1/user/send-sms", {
-                  userId, // Pass the userId in the body
+                  userId, 
                 });
 
                 const result = response.data;
