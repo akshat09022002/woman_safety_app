@@ -11,19 +11,19 @@ const Panic = () => {
     const data=location.state.props;
     
     // const position = { lats: 43.6532, lng: -79.3832 }; // Initial position
-    const [zoom, setZoom] = useState(9);
+    const [zoom, setZoom] = useState();
 
     // Example coordinates
-    const origin = { lat: data.origin.latitude , lng: data.origin.longitude }; // Toronto
-    const destination = { lat: data.destination[1], lng: data.destination[0] }; // Another location in Toronto
+     const origin = { lat: data.origin.latitude , lng: data.origin.longitude }; 
+     const destination = { lat: data.destination[1], lng: data.destination[0] }; 
 
-    // const origin = { lat: data.origin.latitude , lng: data.origin.longitude }; // Toronto
-    // const destination = { lat: 28.6009479, lng: 77.3460705 }; // Another location in Toronto
+    //const origin = { lat: data.origin.latitude , lng: data.origin.longitude }; // Toronto
+    //const destination = { lat: 28.6009479, lng: 77.3460705 }; // Another location in Toronto
 
     return (
         <div className="min-h-screen flex flex-col justify-center items-center bg-pink-200 relative">
-            <div className="relative w-full max-w-xs">
-                <div className="bg-white h-[556px] w-[272px] rounded-tl-3xl rounded-br-3xl shadow-lg p-6">
+            <div className="relative w-full max-w-xs ">
+                <div className="bg-white h-[556px] w-[272px] rounded-tl-3xl rounded-br-3xl shadow-lg p-6 overflow-auto">
                     <APIProvider apiKey="AIzaSyAtWt9ACf5HMAIoMxxvM6BVoPNaLnzJ1gc">
                         <Map
                             style={{ width: '100%', height: '60%' }}

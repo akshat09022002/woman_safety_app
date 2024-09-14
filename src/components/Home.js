@@ -156,16 +156,16 @@ function Home() {
                 console.log('socket khali hai')
               }
               // add send sms also   
-              try {
-                const response = await axios.post("http://localhost:5000/api/v1/user/send-sms", {
-                  userId, 
-                });
+              // try {
+              //   const response = await axios.post("http://localhost:5000/api/v1/user/send-sms", {
+              //     userId, 
+              //   });
 
-                const result = response.data;
-                console.log(result.msg); // Log the success message
-              } catch (error) {
-                console.error("Failed to send SMS", error);
-              }
+              //   const result = response.data;
+              //   console.log(result.msg); // Log the success message
+              // } catch (error) {
+              //   console.error("Failed to send SMS", error);
+              // }
             }} className="button bg-pink-500 text-white text-xl font-bold py-3 px-8 rounded-full shadow-lg">
               PANIC
             </button>
